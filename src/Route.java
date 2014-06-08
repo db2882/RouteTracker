@@ -6,7 +6,7 @@ import java.util.Properties;
 
 
 public class Route {
-
+	private int IDCounter = 0;
 	/** The name of the MySQL account to use (or empty for anonymous) */
 	private final String userName = "root";
 
@@ -21,10 +21,10 @@ public class Route {
 
 	/** The name of the database we are testing with (this default is installed with MySQL) */
 	private final String dbName = "david_data";
-	
+
 	/** The name of the table we are testing with */
-	private final String tableName = "TESTING123";
-	
+	private final String tableName = "Routes";
+
 	/**
 	 * Get a new database connection
 	 * 
@@ -51,18 +51,45 @@ public class Route {
 	 * @throws SQLException If something goes wrong
 	 */
 	public boolean executeUpdate(Connection conn, String command) throws SQLException {
-	    Statement stmt = null;
-	    try {
-	        stmt = conn.createStatement();
-	        stmt.executeUpdate(command); // This will throw a SQLException if it fails
-	        return true;
-	    } finally {
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+			stmt.executeUpdate(command); // This will throw a SQLException if it fails
+			return true;
+		} finally {
 
-	    	// This will run whether we throw an exception or not
-	        if (stmt != null) { stmt.close(); }
-	    }
+			// This will run whether we throw an exception or not
+			if (stmt != null) { stmt.close(); }
+		}
 	}
-	
+
+	public void updateGrade(Connection conn, int routeId, int grade) throws SQLException{
+		String createString = "UPDATE " + this.tableName + " SET GRADE=" + grade + " WHERE ID=" + routeId;
+		this.executeUpdate(conn, createString);
+	}
+
+	public void updateColor(Connection conn, int routeId, String color) throws SQLException{
+		String createString = "UPDATE " + this.tableName + " SET COLOR ='" + color + "' WHERE ID=" + routeId;
+		this.executeUpdate(conn, createString);
+	}
+
+	public void updateLocation(Connection conn, int routeId, String location) throws SQLException{
+		String createString = "UPDATE " + this.tableName + " SET LOCATION='" + location + "' WHERE ID=" + routeId;
+		this.executeUpdate(conn, createString);
+	}
+
+	public void addRoute(Connection conn,int routeId, String name, String color, int grade, String location) {
+		String createString = "INSERT INTO " + this.tableName + 
+				" value ('" + routeId + "','" + name + "','" + color +
+				"','" + location + "'," + grade +");";
+		try {
+			this.executeUpdate(conn, createString);
+		} catch (SQLException e) {
+			System.out.println("Error in adding route");
+		}
+		IDCounter++;
+	}
+
 	/**
 	 * Connect to MySQL and do some stuff.
 	 */
@@ -79,27 +106,18 @@ public class Route {
 			return;
 		}
 
-		// Create a table
+		// Add element
 		try {
-		    String createString =
-			        "CREATE TABLE " + this.tableName + " ( " +
-			        "ID INTEGER NOT NULL, " +
-			        "NAME varchar(40) NOT NULL, " +
-			        "STREET varchar(40) NOT NULL, " +
-			        "CITY varchar(20) NOT NULL, " +
-			        "STATE char(2) NOT NULL, " +
-			        "ZIP char(5), " +
-			        "PRIMARY KEY (ID))";
-			this.executeUpdate(conn, createString);
-			System.out.println("Created a table");
-	    } catch (SQLException e) {
+			addRoute(conn,4,"purplefairy","purple",10,"gnarnia");
+			updateColor(conn,3,"red");
+		} catch (SQLException e) {
 			System.out.println("ERROR: Could not create the table");
 			e.printStackTrace();
 			return;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Connect to the DB and do some stuff
 	 */
