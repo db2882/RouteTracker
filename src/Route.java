@@ -108,7 +108,7 @@ public class Route {
 
 		// Add element
 		try {
-			addRoute(conn,4,"purplefairy","purple",10,"gnarnia");
+			addRoute(conn,5,"lunar landing","purple",10,"gnarnia");
 			updateColor(conn,3,"red");
 		} catch (SQLException e) {
 			System.out.println("ERROR: Could not create the table");
