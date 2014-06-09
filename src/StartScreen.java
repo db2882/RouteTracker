@@ -15,29 +15,15 @@ import javax.swing.JButton;
 
 
 public class StartScreen {
+	private StartScreenModel model;
+	public JFrame frame;
 
-	private JFrame frame;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					StartScreen window = new StartScreen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	
 	/**
 	 * Create the application.
 	 */
-	public StartScreen() {
+	public StartScreen(StartScreenModel mod) {
+		model = mod;
 		initialize();
 	}
 
@@ -55,7 +41,7 @@ public class StartScreen {
 		lblWelcomeToRoutetracker.setBounds(290, 0, 199, 27);
 		frame.getContentPane().add(lblWelcomeToRoutetracker);
 		
-		JList databaseList = new JList();
+		JList databaseList = new JList(model.getListModel());
 		databaseList.setBounds(290, 49, 199, 413);
 		frame.getContentPane().add(databaseList);
 		
